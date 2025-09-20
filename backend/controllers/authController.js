@@ -1,17 +1,29 @@
 const z = require("zod");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const pool = require("../config/mongo.js"); // Assuming you have a pool setup for MongoDB
+const pool = require("../config/db.js"); // Postgres pool
 require("dotenv").config();
-const {asyncHandler}=require("../utils/asyncHandler")
+const { asyncHandler } = require("../utils/asyncHandler");
 
+// 🔹 Debug function to check which DB is being used
+const logDbInfo = async () => {
+  try {
+    const res = await pool.query("SELECT current_database(), inet_server_addr(), current_user;");
+    console.log(" DEBUG DB INFO:", res.rows);
+  } catch (err) {
+    console.error(" DB DEBUG ERROR:", err);
+  }
+};
 
+// Call it once when this controller is loaded
+logDbInfo();
 
 exports.signup = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
     return res.status(400).json({ error: "All fields are required" });
   }
+
   const validuserdata = z.object({
     username: z.string()
       .min(4, "Username must have 4 characters")
@@ -24,6 +36,7 @@ exports.signup = asyncHandler(async (req, res) => {
       .regex(/[0-9]/, "At least one number required")
       .regex(/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/, "At least one special character required")
   });
+
   const result = validuserdata.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({ error: result.error.errors[0].message });
@@ -88,5 +101,3 @@ exports.login = asyncHandler(async (req, res) => {
 
   return res.status(200).json({ token, message: "Login successful" });
 });
-
-
