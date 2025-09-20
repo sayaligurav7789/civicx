@@ -5,7 +5,7 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 
-const clerkPubKey = "pk_test_ZGlyZWN0LXNwb25nZS04NC5jbGVyay5hY2NvdW50cy5kZXYk";
+const clerkPubKey = "pk_test_ZHJpdmVuLWNoaW1wLTc3LmNsZXJrLmFjY291bnRzLmRldiQ";
 
 if (!clerkPubKey) {
   throw new Error("Missing Clerk publishable key. Check your .env file.");
