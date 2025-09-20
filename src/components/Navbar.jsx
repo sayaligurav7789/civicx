@@ -90,11 +90,6 @@ const Navbar = () => {
       icon: Phone,
     },
     {
-      title: "Our contributors",
-      href: "/contributors",
-      icon: Users,
-    },
-    {
       title: "Voting System",
       href: "/voting-system",
       icon: Vote,
